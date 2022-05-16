@@ -1,0 +1,35 @@
+{
+    "manifest_version": 1,
+    "id": "github-puller",
+    "name": "Github Clone and Pull",
+    "short_name": "github-piller",
+    "version": "0.0.0",
+    "description": "Clone and pull github repo for addon dev",
+    "homepage_url": "https://github.com/Bad-Wolf-developpement/github-puller",
+    "license": "MIT",
+    "author": "Arist0v",
+    "gateway_specific_settings":{
+        "webthings":{
+            "exec": "python3 {path}/main.py",
+            "primary_type": "extension"
+        }
+    },
+    "options":{
+        "default":{
+            "debugMode": "False"
+        },
+        "schema":{
+            "type": "object",
+            "required":[
+                "debugMode"
+            ],
+            "properties": {
+                "debugMode":{
+                    "type": "boolean",
+                    "title": "Debug Mode",
+                    "description": "Enable Debug Mode"
+                }
+            }
+        }
+    }
+}
