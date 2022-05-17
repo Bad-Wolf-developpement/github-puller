@@ -82,21 +82,6 @@ class GithubAPIHandler(APIHandler):
                     dirList.append(name)
         return dirList
 
-    def get_git_branch(self, dir):
-
-        branchs = []
-        if os.getcwd() is not os.path.join(_ADDONS_PATH, dir):
-            os.chdir(os.path.join(_ADDONS_PATH, dir))
-        response = subprocess.run(['git', 'branch'],
-            stdout=subprocess.PIPE).stdout.decode().split('\n ')
-        for branch in response:
-            branchs.append(branch.replace('\n', ''))
-        return branchs
-    
-    def createDict(self, gitFolder, gitBranch):
-        return {'repo': gitFolder, 'branch': gitBranch}
-
-
 if __name__ == '__main__':
     liste = []
     _ADDONS_PATH = [
@@ -107,5 +92,5 @@ if __name__ == '__main__':
         _ADDONS_PATH.insert(0, os.path.join(os.environ['WEBTHINGS_HOME'], 'addons'))
     _ADDONS_PATH = _ADDONS_PATH[0]
     git_folder = GithubAPIHandler.get_git_folder("")
-    for folder in git_folder:
-        liste.append(GithubAPIHandler.createDict("", folder, GithubAPIHandler.get_git_branch("", folder)))    
+    print(git_folder)
+   
