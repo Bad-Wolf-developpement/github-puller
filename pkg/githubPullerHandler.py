@@ -3,6 +3,7 @@ import sys
 import functools
 import json
 import subprocess
+import requests
 from os import path
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lib"))
@@ -82,6 +83,31 @@ class GithubAPIHandler(APIHandler):
                     dirList.append(name)
         return dirList
 
+    def get_github_branchs(self, url):
+        listFromURL = url.split('/')
+        branches= []
+        repo = listFromURL[len(listFromURL) - 1]
+        if len(repo.split('.'))  != 2:
+            return False
+        else:
+            repo = repo.split('.')
+            if repo[1] != 'git':
+                return False
+            else:
+                repo = repo[0]
+        user = listFromURL[len(listFromURL) - 2]
+        gitAPIUrl = f'https://api.github.com/repos/{user}/{repo}/branches'
+        response = requests.get(gitAPIUrl)
+        if response.status_code != 200:
+            return False
+
+        datas = json.loads(response.text)
+        for entry in datas:
+            branches.append(entry['name'])
+
+        github_branches = f'{branches}'
+        return github_branches
+
 if __name__ == '__main__':
     liste = []
     _ADDONS_PATH = [
@@ -91,6 +117,5 @@ if __name__ == '__main__':
     if 'WEBTHINGS_HOME' in os.environ:
         _ADDONS_PATH.insert(0, os.path.join(os.environ['WEBTHINGS_HOME'], 'addons'))
     _ADDONS_PATH = _ADDONS_PATH[0]
-    git_folder = GithubAPIHandler.get_git_folder("")
-    print(git_folder)
-   
+    github_branchs = GithubAPIHandler.get_github_branchs("", 'https://github.com/arist0v/sinope-out-temp.git')
+    print(github_branchs)  
